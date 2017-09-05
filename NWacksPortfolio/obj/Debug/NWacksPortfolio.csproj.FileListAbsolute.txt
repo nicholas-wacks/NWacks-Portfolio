@@ -68,6 +68,6 @@ C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\bin\Microsoft.AI.DependencyCollect
 C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\bin\Microsoft.AI.WindowsServer.xml
 C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\bin\Microsoft.AI.Web.xml
-C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\obj\Debug\NWacksPortfolio.csprojResolveAssemblyReference.cache
 C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\obj\Debug\NWacksPortfolio.dll
 C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\obj\Debug\NWacksPortfolio.pdb
+C:\WorkspaceT\NWacksPortfolio\NWacksPortfolio\obj\Debug\NWacksPortfolio.csprojResolveAssemblyReference.cache
