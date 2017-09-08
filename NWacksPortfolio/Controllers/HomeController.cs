@@ -10,9 +10,14 @@ namespace NWacksPortfolio.Controllers
     {
         public ActionResult Index()
         {
+            var x = PortfolioApiController.GetDefaultCryptoCurrencyModel();
             return View();
         }
         
+        public ActionResult D3CryptoTracker()
+        {
 
+            return View();
+        }
     }
 }
