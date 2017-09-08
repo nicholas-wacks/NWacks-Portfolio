@@ -19,12 +19,12 @@ namespace NWacksPortfolio.Controllers
         public static CryptoCurrencyModel GetDefaultCryptoCurrencyModel()
         {
             var model = new CryptoCurrencyModel();
-            model.cryptoData = GetCryptoCurrencyData();
+            model.CryptoData = GetCryptoCurrencyData();
 
-            if (model.cryptoData.Substring(1, 5) == "Error")
-                model.hasError = true;
+            if (model.CryptoData.Substring(1, 5) == "Error")
+                model.HasError = true;
             else
-                model.hasError = false;
+                model.HasError = false;
 
             return model;
         }

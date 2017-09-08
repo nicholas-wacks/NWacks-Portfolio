@@ -10,11 +10,11 @@ namespace NWacksPortfolio.Models
         /// <summary>
         /// Flag used to determing if an error was found
         /// </summary>
-        public bool hasError { get; set; }
+        public bool HasError { get; set; }
 
         /// <summary>
         /// JSON object or list containing one or more data summaries of currencies, or an error message if hasError is true
         /// </summary>
-        public string cryptoData { get; set; }
+        public string CryptoData { get; set; }
     }
 }

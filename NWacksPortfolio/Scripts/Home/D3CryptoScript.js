@@ -1,0 +1,2 @@
+﻿var cryptoData = $('#cryptoData').val();
+
