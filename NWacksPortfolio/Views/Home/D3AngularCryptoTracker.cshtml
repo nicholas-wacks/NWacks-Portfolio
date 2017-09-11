@@ -1,0 +1,44 @@
+﻿@model NWacksPortfolio.Models.CryptoCurrencyModel
+
+@{
+    ViewBag.Title = "D3CryptoTracker";
+}
+@section Scripts
+{
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="~/Scripts/Home/D3AngularCryptoScript.js"></script>
+}
+
+<input type="hidden" id="cryptoData" value="@Model.CryptoData" />
+
+<h1>
+    Crypto Currency Demo
+</h1>
+<div id="mainView">
+    <!--D3 graph of crypto data-->
+    <div class="container">
+        <h2>Crypto Currency Graph using D3.js</h2>
+
+        <div class="row">
+
+        </div>
+    </div>
+
+    <!--Angular data table of crypto data-->
+    <div class="container">
+        <h2>Current Crypto Currency data, displayed using Angular.js</h2>
+
+        <div class="row">
+
+        </div>
+    </div>
+</div>
+<div id="errorView">
+    <!--Display a basic error message-->
+    <div class="jumbotron">
+        <h2>Sorry, we have encountered an error:</h2>
+        <p id="errorMessage"></p>
+        <button type="button" class="btn btn-primary" id="retryButton">Retry Default Data Load</button>
+    </div>
+</div>

@@ -17,7 +17,7 @@ namespace NWacksPortfolio.Controllers
         /// D3CryptoTracker is a demo using an external API returning JSON to be shown displayed using a D3.js 
         /// </summary>
         /// <returns></returns>
-        public ActionResult D3CryptoTracker()
+        public ActionResult D3AngularCryptoTracker()
         {
             var model = PortfolioApiController.GetDefaultCryptoCurrencyModel();
             return View(model);

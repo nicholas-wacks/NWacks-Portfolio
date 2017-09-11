@@ -21,7 +21,7 @@ namespace NWacksPortfolio.Controllers
             var model = new CryptoCurrencyModel();
             model.CryptoData = GetCryptoCurrencyData();
 
-            if (model.CryptoData.Substring(1, 5) == "Error")
+            if (model.CryptoData.Substring(2, 5) == "Error")
                 model.HasError = true;
             else
                 model.HasError = false;
@@ -70,12 +70,12 @@ namespace NWacksPortfolio.Controllers
             catch (Newtonsoft.Json.JsonReaderException)
             {
                 //Exception parsing JSON
-                return "{Error:'Invalid JSON'}";
+                return "{\"Error\":\"Invalid JSON\"}";
             }
             catch (Exception e)
             {
                 //Miscellaneous error (in theory, shouldn't hit this)
-                return "{Error:'" + e.Message + "'}";
+                return "{\"Error\":\"" + e.Message + "\"}";
             }
         }
     }
