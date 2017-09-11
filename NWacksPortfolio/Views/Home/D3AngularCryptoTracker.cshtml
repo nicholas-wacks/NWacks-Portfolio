@@ -3,11 +3,17 @@
 @{
     ViewBag.Title = "D3CryptoTracker";
 }
-@section Scripts
+
+@section scripts
 {
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="~/Scripts/Home/D3AngularCryptoScript.js"></script>
+}
+
+@section styles
+{
+    <link href="~/Content/D3AngularCrypto.css" rel="stylesheet" />
 }
 
 <input type="hidden" id="cryptoData" value="@Model.CryptoData" />
@@ -15,13 +21,18 @@
 <h1>
     Crypto Currency Demo
 </h1>
-<div id="mainView">
+
+<div id="mainView" style="display:none">
     <!--D3 graph of crypto data-->
     <div class="container">
         <h2>Crypto Currency Graph using D3.js</h2>
 
-        <div class="row">
+        <h3>Current USD value of top 15 most traded currencies</h3>
+        <div class="current-value-graph">
+        </div>
 
+        <h3>Current USD market cap value of top 15 most traded currencies</h3>
+        <div class="market-cap-pie-chart">
         </div>
     </div>
 
@@ -34,7 +45,7 @@
         </div>
     </div>
 </div>
-<div id="errorView">
+<div id="errorView" style="display:none">
     <!--Display a basic error message-->
     <div class="jumbotron">
         <h2>Sorry, we have encountered an error:</h2>
