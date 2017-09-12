@@ -1,4 +1,21 @@
-﻿var cryptoData = $('#cryptoData').val();
+﻿/* Sample API data for reference
+        "id": "bitcoin",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "rank": "1",
+        "price_usd": "4184.51",
+        "price_btc": "1.0",
+        "24h_volume_usd": "1540110000.0",
+        "market_cap_usd": "69290200564.0",
+        "available_supply": "16558737.0",
+        "total_supply": "16558737.0",
+        "percent_change_1h": "-0.48",
+        "percent_change_24h": "0.39",
+        "percent_change_7d": "-1.7",
+        "last_updated": "1505152478"
+*/
+
+var cryptoData = $('#cryptoData').val();
 var cryptoObj = JSON.parse(cryptoData);
 
 //Returns true if the passed in string is not a JSON error message
@@ -20,34 +37,23 @@ function showErrorIfDataInvalid(data) {
     }
 }
 
+//Generates a pseudo random hexcode color from a seed string, which will return the same result
+//  for a given string every time it's passed in. Used to create unique colors for each currency
 function getRandomColorFromSeedString(seed) {
+    //Convert seed string to number based on ascii code values
     var num = 0;
     for (var i = 0; i < seed.length; i++) {
         num += seed.charCodeAt(i);
     }
 
+    //Generates a "random" number from the seed string's number by taking the sin of it, then normalizes 
+    //  that random number to a valid hexcode color and returns it as a hexadecimal string
     return Math.floor((Math.abs(Math.sin(parseInt(num)) * 16777215)) % 16777215).toString(16)
 }
 
-/* sample data
-        "id": "bitcoin",
-        "name": "Bitcoin",
-        "symbol": "BTC",
-        "rank": "1",
-        "price_usd": "4184.51",
-        "price_btc": "1.0",
-        "24h_volume_usd": "1540110000.0",
-        "market_cap_usd": "69290200564.0",
-        "available_supply": "16558737.0",
-        "total_supply": "16558737.0",
-        "percent_change_1h": "-0.48",
-        "percent_change_24h": "0.39",
-        "percent_change_7d": "-1.7",
-        "last_updated": "1505152478"
-*/
-
 //Handle D3 section
 function initializeD3() {
+    //Initialize the D3 data as a subset of the master data
     var d3Data = cryptoObj.slice(0, 15);
 
     d3Data.forEach(function (element) {
@@ -59,6 +65,7 @@ function initializeD3() {
         .domain([0, d3.max(d3Data.map(function (o) { return Number(o.price_usd); }))])
         .range([160, 860]);
 
+    //Creates the bars of the chart as colored divs, and then creates a tooltip for each bar to be shown on hover
     d3.select(".current-value-graph")
         .selectAll("div")
         .data(d3Data)
@@ -75,6 +82,7 @@ function initializeD3() {
     var radius = Math.min(width, height) / 2;
     var inner = radius * 0.55;
 
+    //Create the svg shell
     var svg = d3.select('.market-cap-pie-chart')
         .append('svg')
         .attr('width', width)
@@ -82,6 +90,7 @@ function initializeD3() {
         .append('g')
         .attr('transform', 'translate(' + (width / 2) + ',' + ((height + 50) / 2) + ')');
 
+    //Define the standard and hover-over donut arc sizes
     var arc = d3.arc()
         .innerRadius(inner)
         .outerRadius(radius);
@@ -90,10 +99,12 @@ function initializeD3() {
         .innerRadius(inner * 0.95)
         .outerRadius(radius * 1.05);
 
+    //Set market cap to be the relevant value for pie slice sizes
     var pie = d3.pie()
         .value(function (d) { return d.market_cap_usd; })
         .sort(null);
 
+    //Create the slices and set colors
     var path = svg.selectAll('path')
         .data(pie(d3Data))
         .enter()
@@ -110,20 +121,23 @@ function initializeD3() {
     tooltip.append('div')
         .attr('class', 'tooltip-label');
 
+    //When hovering over a slice, show the tooltip with the relevant data for that slice, and slightly enlarge the slice
     path.on('mouseover', function (d) {
         var total = d3.sum(d3Data.map(function (d) {
             return d.market_cap_usd;
         }));
-        
+
         var percent = Math.round(1000 * d.data.market_cap_usd / total) / 10;
         tooltip.select('.tooltip-label').html(d.data.name + "<br />$" + d.data.market_cap_usd + "<br />" + percent + '%');
         tooltip.style('display', 'block');
 
+        //Enlarges the slice over .275s
         d3.select(this).transition()
             .duration(275)
             .attr("d", hoverArc);
     });
 
+    //When not hovering over a slice, hide the tooltip and shrink the slice to the original size
     path.on('mouseout', function (d) {
         tooltip.style('display', 'none');
 
@@ -132,19 +146,17 @@ function initializeD3() {
             .attr("d", arc);
     });
 
+    //Make the tooltip follow the mouse while hovering over a slice
     path.on('mousemove', function (d) {
         tooltip.style('top', (d3.event.layerY + 10) + 'px')
             .style('left', (d3.event.layerX + 10) + 'px');
     });
 
+    //Define the resizing function attribute
     path.append('text')
         .attr('transform', function (d) {
             var c = arc.centroid(d);
-            console.log(c);
             return "translate(" + c[0] + "," + c[1] + ")";
-        })
-        .text(function (d) {
-            return d.value + "%";
         });
 }
 
