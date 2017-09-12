@@ -3,7 +3,7 @@ var cryptoObj = JSON.parse(cryptoData);
 
 //Returns true if the passed in string is not a JSON error message
 function verifyCryptoData(data) {
-    return !(data.substring(2, 7) == 'Error') 
+    return !(data.substring(2, 7) == 'Error')
 }
 
 //Handles the display of the error or main view depending on data validity
@@ -25,7 +25,7 @@ function getRandomColorFromSeedString(seed) {
     for (var i = 0; i < seed.length; i++) {
         num += seed.charCodeAt(i);
     }
-    
+
     return Math.floor((Math.abs(Math.sin(parseInt(num)) * 16777215)) % 16777215).toString(16)
 }
 
@@ -90,7 +90,6 @@ function initializeD3() {
         .value(function (d) { return d.market_cap_usd; })
         .sort(null);
 
-    //TODO: Data figuring out
     var path = svg.selectAll('path')
         .data(pie(d3Data))
         .enter()
@@ -98,10 +97,33 @@ function initializeD3() {
         .attr('fill', function (d, i) {
             return d.data.color;
         })
-        .attr('d', arc)
-        .text(function (d) { return d.data.symbol + ": $" + d.data.price_usd })
-        .append("span")
-        .html(function (d) { return d.data.name + "<br />Rank: " + d.data.rank + "<br />Current USD Value: $" + d.data.price_usd + "<br />Current USD Market Cap: $" + d.data.market_cap_usd });;
+        .attr('d', arc);
+
+    var tooltip = d3.select('.market-cap-pie-chart')
+        .append('div')
+        .attr('class', 'pie-tooltip');
+
+    tooltip.append('div')
+        .attr('class', 'tooltip-label');
+
+    path.on('mouseover', function (d) {
+        var total = d3.sum(d3Data.map(function (d) {
+            return d.market_cap_usd;
+        }));
+        
+        var percent = Math.round(1000 * d.data.market_cap_usd / total) / 10;
+        tooltip.select('.tooltip-label').html(d.data.name + "<br />$" + d.data.market_cap_usd + "<br />" + percent + '%');
+        tooltip.style('display', 'block');
+    });
+
+    path.on('mouseout', function (d) {
+        tooltip.style('display', 'none');
+    });
+
+    path.on('mousemove', function (d) {
+        tooltip.style('top', (d3.event.layerY + 10) + 'px')
+            .style('left', (d3.event.layerX + 10) + 'px');
+    });
 }
 
 //Handle Angular section

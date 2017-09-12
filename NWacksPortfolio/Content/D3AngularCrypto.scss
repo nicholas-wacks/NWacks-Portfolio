@@ -1,6 +1,6 @@
 ﻿.current-value-graph {
     div {
-        font: 10px sans-serif;
+        font: 12px;
         background-color: #4682b4;
         text-align: right;
         padding: 5px;
@@ -12,12 +12,12 @@
             color: #fff;
             text-align: center;
             border-radius: 4px;
-            padding: 5px;
+            padding: 10px;
             background-color: rgba(0,0,0,0.75);
-            /* Position the tooltip */
             position: absolute;
             margin: -5px 0 0 10px;
             z-index: 1;
+            box-shadow: 0 0 5px #999999;
         }
     }
 
@@ -35,4 +35,24 @@
     background-color: #dae6f0;
     border: 1px solid #192f41;
     width: 100%;
+
+    svg {
+        display: block;
+        margin: auto;
+    }
+
+    .pie-tooltip {
+        font: 12px;
+        display: none;
+        padding: 10px;
+        position: absolute;
+        text-align: center;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        padding: 5px;
+        background-color: rgba(0,0,0,0.75);
+        z-index: 1;
+        box-shadow: 0 0 5px #999999;
+    }
 }
