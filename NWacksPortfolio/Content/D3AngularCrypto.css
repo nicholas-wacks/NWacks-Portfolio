@@ -8,7 +8,8 @@
     text-align: right;
     padding: 5px;
     margin: 1px;
-    color: white; }
+    color: white;
+    transition: all 0.25s; }
     .current-value-graph div span {
       visibility: hidden;
       color: #fff;
@@ -20,14 +21,19 @@
       margin: -5px 0 0 10px;
       z-index: 1;
       box-shadow: 0 0 5px #999999; }
-  .current-value-graph div:hover span {
-    visibility: visible; }
+  .current-value-graph div:hover {
+    padding: 10px; }
+    .current-value-graph div:hover span {
+      visibility: visible; }
 
 .market-cap-pie-chart {
   padding: 5px;
   background-color: #dae6f0;
   border: 1px solid #192f41;
   width: 100%; }
+  .market-cap-pie-chart svg {
+    display: block;
+    margin: auto; }
   .market-cap-pie-chart .pie-tooltip {
     font: 12px;
     display: none;

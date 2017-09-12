@@ -6,6 +6,7 @@
         padding: 5px;
         margin: 1px;
         color: white;
+        transition: all 0.25s;
 
         span {
             visibility: hidden;
@@ -21,8 +22,11 @@
         }
     }
 
-    div:hover span {
-        visibility: visible;
+    div:hover {
+        padding: 10px;
+        span {
+            visibility: visible;
+        }
     }
 
     padding: 5px;

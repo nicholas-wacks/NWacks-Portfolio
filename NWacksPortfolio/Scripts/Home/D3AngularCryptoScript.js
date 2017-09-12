@@ -57,7 +57,7 @@ function initializeD3() {
     //Setup Bar Graph
     var x = d3.scaleLinear()
         .domain([0, d3.max(d3Data.map(function (o) { return Number(o.price_usd); }))])
-        .range([120, 860]);
+        .range([160, 860]);
 
     d3.select(".current-value-graph")
         .selectAll("div")
@@ -70,21 +70,25 @@ function initializeD3() {
         .html(function (d) { return d.name + "<br />Rank: " + d.rank + "<br />Current USD Value: $" + d.price_usd + "<br />Current USD Market Cap: $" + d.market_cap_usd });
 
     //Setup Pie Chart
-    var width = 720;
-    var height = 720;
+    var width = 920;
+    var height = 640;
     var radius = Math.min(width, height) / 2;
-    var inner = radius - 180;
+    var inner = radius * 0.55;
 
     var svg = d3.select('.market-cap-pie-chart')
         .append('svg')
         .attr('width', width)
-        .attr('height', height)
+        .attr('height', height + 50)
         .append('g')
-        .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
+        .attr('transform', 'translate(' + (width / 2) + ',' + ((height + 50) / 2) + ')');
 
     var arc = d3.arc()
         .innerRadius(inner)
         .outerRadius(radius);
+
+    var hoverArc = d3.arc()
+        .innerRadius(inner * 0.95)
+        .outerRadius(radius * 1.05);
 
     var pie = d3.pie()
         .value(function (d) { return d.market_cap_usd; })
@@ -114,16 +118,34 @@ function initializeD3() {
         var percent = Math.round(1000 * d.data.market_cap_usd / total) / 10;
         tooltip.select('.tooltip-label').html(d.data.name + "<br />$" + d.data.market_cap_usd + "<br />" + percent + '%');
         tooltip.style('display', 'block');
+
+        d3.select(this).transition()
+            .duration(275)
+            .attr("d", hoverArc);
     });
 
     path.on('mouseout', function (d) {
         tooltip.style('display', 'none');
+
+        d3.select(this).transition()
+            .duration(275)
+            .attr("d", arc);
     });
 
     path.on('mousemove', function (d) {
         tooltip.style('top', (d3.event.layerY + 10) + 'px')
             .style('left', (d3.event.layerX + 10) + 'px');
     });
+
+    path.append('text')
+        .attr('transform', function (d) {
+            var c = arc.centroid(d);
+            console.log(c);
+            return "translate(" + c[0] + "," + c[1] + ")";
+        })
+        .text(function (d) {
+            return d.value + "%";
+        });
 }
 
 //Handle Angular section
