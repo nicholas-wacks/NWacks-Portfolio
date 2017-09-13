@@ -161,9 +161,29 @@ function initializeD3() {
 }
 
 //Handle Angular section
+function initializeAngular() {
+    //Define the module
+    var cryptoApp = angular.module('cryptoApp', []);
+
+    //Define the controller on the module
+    cryptoApp.controller('CryptoController', function CryptoController($scope) {
+        $scope.currencies = cryptoObj;
+        $scope.page = 1;
+        $scope.recordsPerPage = 10;
+
+        $scope.ceiling = function (value) {
+            return Math.ceil(value);
+        }
+
+    });
+}
+
 
 //Initialize page
 showErrorIfDataInvalid(cryptoData);
 if (verifyCryptoData(cryptoData)) {
     initializeD3();
+    initializeAngular();
 }
+
+//

@@ -40,8 +40,49 @@
     <div class="container">
         <h2>Current Crypto Currency data, displayed using Angular.js</h2>
 
-        <div class="row">
+        <div ng-app="cryptoApp" ng-controller="CryptoController">
+            <div class="input-group">
+                <label>
+                    Currencies per Page:
+                    <input type="number" min="5" max="{{currencies.length}}" ng-model="recordsPerPage" ng-change="page=1;" />
+                </label>
+            </div>
+            <div class="input-group">
+                <label>
+                    Page:
+                    <input type="number" min="1" max="{{ceiling(currencies.length / recordsPerPage)}}" ng-model="page" />
+                </label>
+            </div>
 
+            <table class=" table-striped table">
+                <tr>
+                    <th>Name</th>
+                    <th>Rank</th>
+                    <th>Value per Unit</th>
+                    <th>Market Cap</th>
+                </tr>
+                <tr ng-repeat="currency in currencies" ng-show="$index >= ((page - 1) * recordsPerPage) && $index < (page * recordsPerPage)">
+                    <td>
+                        {{currency.name + ' (' + currency.symbol + ')'}}
+                    </td>
+                    <td>
+                        {{currency.rank}}
+                    </td>
+                    <td>
+                        {{currency.price_usd}}
+                    </td>
+                    <td>
+                        {{currency.market_cap_usd}}
+                    </td>
+                </tr>
+            </table>
+
+            <div class="input-group">
+                <label>
+                    Page:
+                    <input type="number" value="1" min="1" max="" ng-model="page" />
+                </label>
+            </div>
         </div>
     </div>
 </div>
