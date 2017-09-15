@@ -1,4 +1,6 @@
-﻿/* Sample API data for reference
+﻿///<reference path="../underscore-min.js" />
+
+/* Sample API data for reference
         "id": "bitcoin",
         "name": "Bitcoin",
         "symbol": "BTC",
@@ -51,8 +53,8 @@ function getRandomColorFromSeedString(seed) {
     return Math.floor((Math.abs(Math.sin(parseInt(num)) * 16777215)) % 16777215).toString(16)
 }
 
-//Handle D3 section
-function initializeD3() {
+//Handle D3 graphs
+function initializeD3(cryptoObj) {
     //Initialize the D3 data as a subset of the master data
     var d3Data = cryptoObj.slice(0, 15);
 
@@ -160,8 +162,8 @@ function initializeD3() {
         });
 }
 
-//Handle Angular section
-function initializeAngular() {
+//Handle Angular table
+function initializeAngular(cryptoObj) {
     //Define the module
     var cryptoApp = angular.module('cryptoApp', []);
 
@@ -170,20 +172,58 @@ function initializeAngular() {
         $scope.currencies = cryptoObj;
         $scope.page = 1;
         $scope.recordsPerPage = 10;
+        $scope.sortValue = 'rank';
 
+        //Allows the ceil method to be used for determining max pages
         $scope.ceiling = function (value) {
             return Math.ceil(value);
         }
 
+        $scope.setSortValue = function (value) {
+            if ($scope.sortValue == value)
+                $scope.sortValue = '-' + value;
+            else
+                $scope.sortValue = value;
+        }
     });
 }
 
+//Handle Underscore cards
+function initializeUnderscore(cryptoObj) {
+    //TODO: include real data
+    var cardTemplate = _.template('<div class="underscore-card">'
+        + '<div class="card-head">'
+        + '<h4>Title</h4>'
+        + '</div > '
+        + 'Body'
+        + '</div > ');
+
+    var innerContent = '';
+
+    _.each(cryptoObj, function (value, index, list) {
+        innerContent += cardTemplate();
+    });
+
+    $('#underscoreContainer').html(innerContent);
+}
+
+//Convert sorting fields to numbers
+//  Avoids situations where '10' is sorted before '9'
+function cleanDataTypes(dataList) {
+    _.each(dataList, function (value, index, list) {
+        value.rank = parseInt(value.rank);
+        value.price_usd = parseFloat(value.price_usd);
+        value.market_cap_usd = parseFloat(value.market_cap_usd);
+    });
+}
 
 //Initialize page
 showErrorIfDataInvalid(cryptoData);
 if (verifyCryptoData(cryptoData)) {
-    initializeD3();
-    initializeAngular();
+    cleanDataTypes(cryptoObj);
+    initializeD3(cryptoObj);
+    initializeAngular(cryptoObj);
+    initializeUnderscore(cryptoObj);
 }
 
 //

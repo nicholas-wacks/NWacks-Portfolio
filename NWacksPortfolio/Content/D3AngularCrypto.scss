@@ -60,3 +60,31 @@
         box-shadow: 0 0 5px #999999;
     }
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.underscore-card {
+    width: 240px;
+    display: inline-block;
+    padding: 10px;
+    margin: 0 10px 10px 0;
+    border: 1px solid #4682b4;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+
+    .card-head {
+        position: relative;
+        bottom: 10px;
+        background-color: #4682b4;
+        color: white;
+        padding: 5px;
+        left: -10px;
+        width: 238px;
+    }
+}
+
+.underscore-card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
