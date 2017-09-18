@@ -17,9 +17,6 @@
         "last_updated": "1505152478"
 */
 
-var cryptoData = $('#cryptoData').val();
-var cryptoObj = JSON.parse(cryptoData);
-
 //Returns true if the passed in string is not a JSON error message
 function verifyCryptoData(data) {
     return !(data.substring(2, 7) == 'Error')
@@ -27,12 +24,13 @@ function verifyCryptoData(data) {
 
 //Handles the display of the error or main view depending on data validity
 function showErrorIfDataInvalid(data) {
-    if (verifyCryptoData(cryptoData)) {
+    if (verifyCryptoData(data)) {
         $('#mainView').show();
         $('#errorView').hide();
     }
     else {
-        var errorMessage = cryptoObj.Error;
+        var errorObj = JSON.parse(data);
+        var errorMessage = errorObj.Error;
         $('#errorMessage').text(errorMessage);
         $('#mainView').hide();
         $('#errorView').show();
@@ -54,10 +52,14 @@ function getRandomColorFromSeedString(seed) {
 }
 
 //Handle D3 graphs
-function initializeD3(cryptoObj) {
+function initializeD3(cryptoObj, countToDisplay = 15) {
     //Initialize the D3 data as a subset of the master data
-    var d3Data = cryptoObj.slice(0, 15);
+    var d3Data = cryptoObj.slice(0, countToDisplay);
 
+    //Show correct number for chart titles
+    $('.d3-top-number').html(d3Data.length);
+
+    //Set colors for each chart element by the crypto symbols
     d3Data.forEach(function (element) {
         element.color = "#" + getRandomColorFromSeedString(element.symbol);
     });
@@ -66,6 +68,9 @@ function initializeD3(cryptoObj) {
     var x = d3.scaleLinear()
         .domain([0, d3.max(d3Data.map(function (o) { return Number(o.price_usd); }))])
         .range([160, 860]);
+
+    //Clear any previous chart
+    $(".current-value-graph").html('');
 
     //Creates the bars of the chart as colored divs, and then creates a tooltip for each bar to be shown on hover
     d3.select(".current-value-graph")
@@ -83,6 +88,9 @@ function initializeD3(cryptoObj) {
     var height = 640;
     var radius = Math.min(width, height) / 2;
     var inner = radius * 0.55;
+
+    //Clear any previous chart
+    $('.market-cap-pie-chart').html('');
 
     //Create the svg shell
     var svg = d3.select('.market-cap-pie-chart')
@@ -190,21 +198,75 @@ function initializeAngular(cryptoObj) {
 
 //Handle Underscore cards
 function initializeUnderscore(cryptoObj) {
-    //TODO: include real data
-    var cardTemplate = _.template('<div class="underscore-card">'
-        + '<div class="card-head">'
-        + '<h4>Title</h4>'
-        + '</div > '
-        + 'Body'
-        + '</div > ');
+    var cardTemplate = _.template('<div class="col-md-4 col-sm-6 col-xs-12">'
+        + '<div class="underscore-card panel panel-info">'
+        + '<div class="panel-heading">'
+        + '<h4><%= title %></h4>'
+        + '</div >'
+        + '<div class="panel-body">'
+        + '<b>Current Rank:</b> <%= rank %><br />'
+        + '<b>Current Value:</b> $<%= value %><br />'
+        + '<b>Current Market Cap:</b> $<%= marketCap %><br />'
+        + '</div >'
+        + '</div >'
+        + '</div >');
 
     var innerContent = '';
 
     _.each(cryptoObj, function (value, index, list) {
-        innerContent += cardTemplate();
+        innerContent += cardTemplate({
+            title: value.symbol + ' - ' + value.name,
+            rank: value.rank,
+            value: value.price_usd,
+            marketCap: value.market_cap_usd
+        });
     });
 
     $('#underscoreContainer').html(innerContent);
+}
+
+//Calls the server side API and resets the page with returned data
+function callCryptoApi(countLimit = 100, cryptoId = '', d3Count = 15) {
+    $.ajax({
+        url: "/api/PortfolioApi/GetCryptoCurrencyData",
+        data: {
+            limit: countLimit,
+            crypto: cryptoId
+        },
+        success: function (data, textStatus, jqXHR) {
+            initializePage(data, d3Count);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            initializePage('{"Error": "' + errorThrown + '"}');
+        }
+    });
+}
+
+//Handle Ajax Buttons Section
+function initializeAjaxButtons() {
+    $('.retry-button').click(function () {
+        callCryptoApi();
+    });
+
+    $('#limitsApiButton').click(function () {
+        callCryptoApi($('#limitInput').val(), '',$('#d3ChartLimitInput').val());
+    });
+
+    $('#bitcoinButton').click(function () {
+        callCryptoApi(1, 'bitcoin');
+    });
+
+    $('#ethereumButton').click(function () {
+        callCryptoApi(1, 'ethereum');
+    });
+
+    $('#litecoinButton').click(function () {
+        callCryptoApi(1, 'litecoin');
+    });
+
+    $('#errorButton').click(function () {
+        callCryptoApi(100, 'fakeCoinShouldCauseError');
+    });
 }
 
 //Convert sorting fields to numbers
@@ -218,12 +280,17 @@ function cleanDataTypes(dataList) {
 }
 
 //Initialize page
-showErrorIfDataInvalid(cryptoData);
-if (verifyCryptoData(cryptoData)) {
-    cleanDataTypes(cryptoObj);
-    initializeD3(cryptoObj);
-    initializeAngular(cryptoObj);
-    initializeUnderscore(cryptoObj);
-}
+function initializePage(cryptoData, d3Count = 15) {
 
-//
+    showErrorIfDataInvalid(cryptoData);
+    if (verifyCryptoData(cryptoData)) {
+        var cryptoObj = JSON.parse(cryptoData);
+        cleanDataTypes(cryptoObj);
+        initializeD3(cryptoObj, d3Count);
+        initializeAngular(cryptoObj);
+        initializeUnderscore(cryptoObj);
+    }
+}
+var cryptoData = $('#cryptoData').val();
+initializePage(cryptoData);
+initializeAjaxButtons();

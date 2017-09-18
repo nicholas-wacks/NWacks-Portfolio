@@ -19,7 +19,8 @@ namespace NWacksPortfolio.Controllers
         public static CryptoCurrencyModel GetDefaultCryptoCurrencyModel()
         {
             var model = new CryptoCurrencyModel();
-            model.CryptoData = GetCryptoCurrencyData();
+            var controller = new PortfolioApiController();
+            model.CryptoData = controller.GetCryptoCurrencyData();
 
             if (model.CryptoData.Substring(2, 5) == "Error")
                 model.HasError = true;
@@ -28,7 +29,7 @@ namespace NWacksPortfolio.Controllers
 
             return model;
         }
-        
+
         /// <summary>
         /// Makes a call to Coin Market Cap's ticker Api to get current information on currencies
         /// </summary>
@@ -36,7 +37,8 @@ namespace NWacksPortfolio.Controllers
         /// <param name="limit">Optional parameter specifying the max number of currencies to return. Will return the top 100 if no limit is given. 
         ///     A value of zero will return all results</param>
         /// <returns>Will return a JSON list of crypto currency data, or an error message in JSON</returns>
-        public static string GetCryptoCurrencyData(string crypto = "", uint limit = 100) {
+        //[HttpGet]
+        public string GetCryptoCurrencyData(string crypto = "", uint limit = 100) {
             string url = "https://api.coinmarketcap.com/v1/ticker";
 
             //If a specific crypto currency is specified, the limit doesn't matter
@@ -45,11 +47,19 @@ namespace NWacksPortfolio.Controllers
             else if (limit != 0)
                 url += "?limit=" + limit.ToString();
 
-            var response = new WebClient().DownloadString(url);
+            string response;
+            try
+            {
+                response = new WebClient().DownloadString(url);
+            }
+            catch (Exception e)
+            {
+                return "{\"Error\":\"" + e.Message + "\"}";
+            }
 
             //Verify that the web client returned data
             if (string.IsNullOrEmpty(response))
-                return "{Error:'Coin Market Cap API did not return data'}";
+                return "{\"Error\":\"Coin Market Cap API did not return data\"}";
 
             return GetValidatedJsonOrErrorJson(response);
         }
