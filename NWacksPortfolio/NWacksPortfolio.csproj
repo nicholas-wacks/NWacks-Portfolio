@@ -160,10 +160,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\NikDB.mdf" />
-    <Content Include="App_Data\NikDB_log.ldf">
-      <DependentUpon>NikDB.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\D3AngularCrypto.css" />
@@ -187,7 +183,10 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\Home\D3AngularCryptoScript.js" />
+    <Content Include="Scripts\Home\CryptoAngularScript.js" />
+    <Content Include="Scripts\Home\CryptoCurrencyScript.js" />
+    <Content Include="Scripts\Home\CryptoD3Script.js" />
+    <Content Include="Scripts\Home\CryptoUnderscoreScript.js" />
     <Content Include="Scripts\Home\IndexScript.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -213,9 +212,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\D3AngularCryptoTracker.cshtml" />
+    <Content Include="Views\Home\CryptoCurrencyDemo.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
