@@ -28,7 +28,6 @@
 
 <div id="mainView" style="display:none">
     <!--D3 graph of crypto data-->
-    
     <div class="container collapsible-panel" data-title="Crypto Currency Graphs using D3.js">
         <h3>Current USD value of top <span class="d3-top-number"></span> most traded currencies</h3>
         <div class="current-value-graph">
@@ -116,6 +115,7 @@
             Calls the default API (which is used on page load) to refresh the data on the page
         </div>
         <hr />
+
         <div class="row">
             <div class="input-group">
                 <label>
@@ -132,6 +132,7 @@
             Calls the API with an optional parameter, specifying how many currencies to return
         </div>
         <hr />
+        
         <div class="row">
             <button type="button" class="btn btn-primary" id="bitcoinButton">Get Bitcoin Data</button>
             Calls the API to return just data for Bitcoin
@@ -147,6 +148,7 @@
         </div>
     </div>
 </div>
+
 <div id="errorView" style="display:none">
     <!--Display a basic error message-->
     <div class="jumbotron">
