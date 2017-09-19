@@ -99,6 +99,15 @@
                     <input type="number" min="1" max="{{ceiling(currencies.length / recordsPerPage)}}" ng-model="page" />
                 </label>
             </div>
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link clickable" ng-click="page = 1">&laquo;</a></li>
+                <li class="page-item"><a class="page-link clickable" ng-click="page = page - 2" ng-show="page > 2">{{page - 2}}</a></li>
+                <li class="page-item"><a class="page-link clickable" ng-click="page = page - 1" ng-show="page > 1">{{page - 1}}</a></li>
+                <li class="page-item"><a class="page-link clickable">{{page}}</a></li>
+                <li class="page-item"><a class="page-link clickable" ng-click="page = page + 1" ng-show="page + 1 < ceiling(currencies.length / recordsPerPage)">{{page + 1}}</a></li>
+                <li class="page-item"><a class="page-link clickable" ng-click="page = page + 2" ng-show="page + 1 < ceiling(currencies.length / recordsPerPage)">{{page + 2}}</a></li>
+                <li class="page-item"><a class="page-link clickable" ng-click="page = ceiling(currencies.length / recordsPerPage)">&raquo;</a></li>
+            </ul>
         </div>
     </div>
 
