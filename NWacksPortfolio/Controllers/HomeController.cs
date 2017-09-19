@@ -22,5 +22,14 @@ namespace NWacksPortfolio.Controllers
             var model = PortfolioApiController.GetDefaultCryptoCurrencyModel();
             return View(model);
         }
+
+        /// <summary>
+        /// Basic online format of my résumé
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Resume()
+        {
+            return View();
+        }
     }
 }
