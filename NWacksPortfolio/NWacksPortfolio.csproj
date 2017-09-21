@@ -213,7 +213,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\CryptoCurrencyDemo.cshtml" />
-    <Content Include="Views\Home\Resume.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
