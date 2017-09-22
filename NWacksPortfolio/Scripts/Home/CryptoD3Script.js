@@ -17,6 +17,7 @@ function getRandomColorFromSeedString(seed) {
 function initializeD3(cryptoObj, countToDisplay = 15) {
     //Initialize the D3 data as a subset of the master data
     var d3Data = cryptoObj.slice(0, countToDisplay);
+    var containerWidth = $('.current-value-graph').parent().width();
 
     //Show correct number for chart titles
     $('.d3-top-number').html(d3Data.length);
@@ -29,7 +30,7 @@ function initializeD3(cryptoObj, countToDisplay = 15) {
     //Setup Bar Graph
     var x = d3.scaleLinear()
         .domain([0, d3.max(d3Data.map(function (o) { return Number(o.price_usd); }))])
-        .range([160, 860]);
+        .range([160, Math.min(860, containerWidth - 160)]);
 
     //Clear any previous chart
     $(".current-value-graph").html('');
@@ -46,8 +47,8 @@ function initializeD3(cryptoObj, countToDisplay = 15) {
         .html(function (d) { return d.name + "<br />Rank: " + d.rank + "<br />Current USD Value: $" + d.price_usd + "<br />Current USD Market Cap: $" + d.market_cap_usd });
 
     //Setup Pie Chart
-    var width = 920;
-    var height = 640;
+    var width = Math.min(920, containerWidth - 80);
+    var height = Math.min(640, containerWidth);
     var radius = Math.min(width, height) / 2;
     var inner = radius * 0.55;
 
